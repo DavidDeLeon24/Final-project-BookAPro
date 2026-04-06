@@ -1,28 +1,39 @@
 const express = require('express');
-const dotenv = require('dotenv');
+const mongoose = require('mongoose');
 const cors = require('cors');
-const connectDB = require('./config/db');
+const dotenv = require('dotenv');
 
 dotenv.config();
-connectDB();
 
 const app = express();
 
+// CORS middleware - MUST be before routes
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true,
+  optionsSuccessStatus: 200
+}));
+
+// Body parser middleware
 app.use(express.json());
-app.use(cors());
+app.use(express.urlencoded({ extended: true }));
 
-const authRoutes = require('./routes/authRoutes');
-const listingRoutes = require('./routes/listingRoutes');
-const reviewRoutes = require('./routes/reviewRoutes');
-const availabilityRoutes = require('./routes/availabilityRoutes');
+// MongoDB Connection
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => console.log('MongoDB Connected'))
+  .catch(err => console.log('MongoDB Error:', err));
 
-app.use('/api/auth', authRoutes);
-app.use('/api/listings', listingRoutes);
-app.use('/api/reviews', reviewRoutes);
-app.use('/api/availability', availabilityRoutes);
+// Routes - IMPORTANT: These must come after middleware
+app.use('/api/auth', require('./routes/authRoutes'));
+app.use('/api/listings', require('./routes/listingRoutes'));
+app.use('/api/reviews', require('./routes/reviewRoutes'));
+app.use('/api/availability', require('./routes/availabilityRoutes'));
+
+// Error handling middleware (must be last)
+app.use((err, req, res, next) => {
+  console.error('Server error:', err);
+  res.status(500).json({ message: err.message || 'Something went wrong!' });
+});
 
 const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

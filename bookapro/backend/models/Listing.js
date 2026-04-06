@@ -8,33 +8,27 @@ const listingSchema = new mongoose.Schema({
   },
   title: {
     type: String,
-    required: [true, 'Please add a title'],
-    trim: true
+    required: true
   },
   category: {
     type: String,
-    required: [true, 'Please select a category'],
+    required: true,
     enum: ['plumber', 'electrician', 'tutor', 'photographer', 'carpenter', 'painter', 'cleaner', 'gardener', 'other']
   },
   description: {
     type: String,
-    required: [true, 'Please add a description']
+    required: true
   },
   price: {
     type: Number,
-    required: [true, 'Please add a price']
+    required: true
   },
   priceUnit: {
     type: String,
-    default: 'hour',
-    enum: ['hour', 'project', 'session', 'day']
+    default: 'hour'
   },
   location: {
-    city: String
-  },
-  isActive: {
-    type: Boolean,
-    default: true
+    city: { type: String, default: '' }
   },
   averageRating: {
     type: Number,
@@ -43,9 +37,15 @@ const listingSchema = new mongoose.Schema({
   totalReviews: {
     type: Number,
     default: 0
+  },
+  isActive: {
+    type: Boolean,
+    default: true
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
   }
-}, {
-  timestamps: true
 });
 
 module.exports = mongoose.model('Listing', listingSchema);
