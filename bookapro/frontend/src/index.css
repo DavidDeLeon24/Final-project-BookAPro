@@ -1,9 +1,11 @@
+/* Global CSS Reset - Removes all default browser margins and paddings */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+/* HTML and Body - Full viewport height, no gaps */
 html, body {
   margin: 0;
   padding: 0;
@@ -11,17 +13,19 @@ html, body {
   height: 100%;
 }
 
+/* Body Styling - Default font and background color */
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;   /* Smoother fonts on Mac/WebKit */
+  -moz-osx-font-smoothing: grayscale;    /* Smoother fonts on Firefox Mac */
   background: #f5f5f5;
   margin: 0;
   padding: 0;
 }
 
+/* Code blocks - Monospace font for code display */
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }

@@ -2,8 +2,11 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import listingService from '../services/listingService';
 
+// CreateListing Page - Allows providers to create a new service listing
 const CreateListing = () => {
   const navigate = useNavigate();
+  
+  // Form state for listing data
   const [formData, setFormData] = useState({
     title: '',
     category: '',
@@ -12,21 +15,21 @@ const CreateListing = () => {
     priceUnit: 'hour',
     location: { city: '' }
   });
+  
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
+  // Available service categories
   const categories = ['plumber', 'electrician', 'tutor', 'photographer', 'carpenter', 'painter', 'cleaner', 'gardener', 'other'];
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
     
-    console.log('Submitting listing:', formData);
-    
     try {
-      const result = await listingService.create(formData);
-      console.log('Create result:', result);
+      await listingService.create(formData);
       alert('Listing created successfully!');
       navigate('/my-listings');
     } catch (err) {
@@ -40,8 +43,12 @@ const CreateListing = () => {
     <div className="form-container">
       <div className="form-card">
         <h2>Create New Listing</h2>
+        
+        {/* Display error message if any */}
         {error && <div className="error-message">{error}</div>}
+        
         <form onSubmit={handleSubmit}>
+          {/* Title input */}
           <input
             type="text"
             placeholder="Title"
@@ -49,6 +56,8 @@ const CreateListing = () => {
             onChange={(e) => setFormData({...formData, title: e.target.value})}
             required
           />
+          
+          {/* Category dropdown */}
           <select
             value={formData.category}
             onChange={(e) => setFormData({...formData, category: e.target.value})}
@@ -59,6 +68,8 @@ const CreateListing = () => {
               <option key={cat} value={cat}>{cat.toUpperCase()}</option>
             ))}
           </select>
+          
+          {/* Description textarea */}
           <textarea
             placeholder="Description"
             rows="5"
@@ -66,6 +77,8 @@ const CreateListing = () => {
             onChange={(e) => setFormData({...formData, description: e.target.value})}
             required
           />
+          
+          {/* Price and Price Unit row */}
           <div className="form-row">
             <input
               type="number"
@@ -84,6 +97,8 @@ const CreateListing = () => {
               <option value="day">Per Day</option>
             </select>
           </div>
+          
+          {/* Location city input */}
           <input
             type="text"
             placeholder="City"
@@ -93,6 +108,8 @@ const CreateListing = () => {
               location: { city: e.target.value }
             })}
           />
+          
+          {/* Submit and Cancel buttons */}
           <button type="submit" disabled={loading}>
             {loading ? 'Creating...' : 'Create Listing'}
           </button>

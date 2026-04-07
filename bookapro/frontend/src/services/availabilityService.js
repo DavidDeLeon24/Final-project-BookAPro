@@ -1,7 +1,9 @@
 import api from './api';
 
+// Service for handling availability-related API calls
+// Manages provider availability slots and customer bookings
 const availabilityService = {
-  // Get availability for a specific listing
+  // Get availability for a specific listing - shows all time slots for a service
   getListingAvailability: async (listingId) => {
     try {
       console.log('Fetching availability for listing:', listingId);
@@ -14,7 +16,7 @@ const availabilityService = {
     }
   },
 
-  // Update availability (provider only)
+  // Update availability - provider marks a time slot as available or unavailable
   updateAvailability: async (listingId, date, timeSlot, status) => {
     try {
       console.log('Updating availability:', { listingId, date, timeSlot, status });
@@ -27,7 +29,7 @@ const availabilityService = {
     }
   },
 
-  // Book a service (customer only)
+  // Book a service - customer books an available time slot
   bookService: async (bookingData) => {
     try {
       console.log('Booking service:', bookingData);

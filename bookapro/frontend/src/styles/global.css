@@ -1,11 +1,12 @@
-/* Time Slots Grid */
+/* Time Slots Grid - Layout for available time slot buttons */
 .time-slots-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, 1fr);  /* 3 columns on desktop */
   gap: 0.5rem;
   margin-top: 1rem;
 }
 
+/* Individual time slot container */
 .time-slot {
   display: flex;
   justify-content: space-between;
@@ -16,16 +17,19 @@
   background: #f9f9f9;
 }
 
+/* Available time slot - green background */
 .time-slot.available {
   background: #d4edda;
   border-color: #28a745;
 }
 
+/* Booked time slot - red background, indicates already taken */
 .time-slot.booked {
   background: #f8d7da;
   border-color: #dc3545;
 }
 
+/* Button inside time slot (Mark Available/Unavailable) */
 .time-slot button {
   padding: 0.25rem 0.5rem;
   font-size: 0.8rem;
@@ -36,16 +40,18 @@
   cursor: pointer;
 }
 
+/* Label for booked slots */
 .time-slot .booked-label {
   color: #dc3545;
   font-size: 0.8rem;
 }
 
-/* Radio buttons for time selection */
+/* Radio buttons for time selection (customer booking view) */
 .time-slot input[type="radio"] {
   margin-right: 0.5rem;
 }
 
+/* Label for radio button */
 .time-slot label {
   cursor: pointer;
   flex: 1;

@@ -5,6 +5,9 @@ import { AuthProvider } from './context/AuthContext';
 import App from './App';
 import './styles/global.css';
 
+// Application Entry Point - Renders the main App component with required providers
+// BrowserRouter: Enables routing functionality throughout the app
+// AuthProvider: Provides authentication state to all components
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>

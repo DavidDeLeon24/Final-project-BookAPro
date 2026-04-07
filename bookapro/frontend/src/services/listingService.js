@@ -1,6 +1,9 @@
 import api from './api';
 
+// Service for handling listing-related API calls
+// Manages CRUD operations for service listings
 const listingService = {
+  // Get all listings with optional search and filter parameters
   getAll: async (filters = {}) => {
     try {
       const params = new URLSearchParams();
@@ -15,6 +18,7 @@ const listingService = {
     }
   },
 
+  // Get a single listing by ID
   getOne: async (id) => {
     try {
       const response = await api.get(`/listings/${id}`);
@@ -25,6 +29,7 @@ const listingService = {
     }
   },
 
+  // Create a new listing (provider only)
   create: async (listingData) => {
     try {
       console.log('Creating listing:', listingData);
@@ -37,6 +42,7 @@ const listingService = {
     }
   },
 
+  // Update an existing listing (owner only)
   update: async (id, listingData) => {
     try {
       const response = await api.put(`/listings/${id}`, listingData);
@@ -47,6 +53,7 @@ const listingService = {
     }
   },
 
+  // Delete a listing (owner only)
   delete: async (id) => {
     try {
       const response = await api.delete(`/listings/${id}`);
@@ -57,6 +64,7 @@ const listingService = {
     }
   },
 
+  // Get all listings belonging to the authenticated provider
   getMyListings: async () => {
     try {
       const response = await api.get('/listings/my/listings');

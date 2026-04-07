@@ -3,28 +3,28 @@ import availabilityService from '../services/availabilityService';
 import listingService from '../services/listingService';
 import { useAuth } from '../context/AuthContext';
 
+// AvailabilityCalendar Component - Displays calendar for booking or managing availability
+// Shows green dates for available slots, red for booked, allows booking or management based on user role
 const AvailabilityCalendar = ({ listingId }) => {
   const { user, isAuthenticated } = useAuth();
-  const [availability, setAvailability] = useState([]);
-  const [listing, setListing] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedTime, setSelectedTime] = useState('');
-  const [message, setMessage] = useState('');
-  const [showModal, setShowModal] = useState(false);
-  const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [availability, setAvailability] = useState([]);        // List of availability slots
+  const [listing, setListing] = useState(null);                // Current listing data
+  const [selectedDate, setSelectedDate] = useState(null);      // Date user clicked on
+  const [selectedTime, setSelectedTime] = useState('');        // Selected time slot for booking
+  const [message, setMessage] = useState('');                  // Optional message from customer
+  const [showModal, setShowModal] = useState(false);           // Show time slot modal
+  const [currentMonth, setCurrentMonth] = useState(new Date()); // Current calendar month
   const [timeSlots] = useState(['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00']);
-  const [isOwner, setIsOwner] = useState(false);
+  const [isOwner, setIsOwner] = useState(false);               // Whether current user owns this listing
 
-  // Load listing to check ownership
+  // Load listing to check if current user is the owner
   useEffect(() => {
     const loadListing = async () => {
       try {
         const listingData = await listingService.getOne(listingId);
         setListing(listingData);
-        // Check if current user is the owner of this listing
         const isListingOwner = isAuthenticated && user && listingData.provider?._id === user.id;
         setIsOwner(isListingOwner);
-        console.log('Is owner:', isListingOwner, 'User:', user?.id, 'Provider:', listingData.provider?._id);
       } catch (error) {
         console.error('Error loading listing:', error);
       }
@@ -32,6 +32,7 @@ const AvailabilityCalendar = ({ listingId }) => {
     loadListing();
   }, [listingId, user, isAuthenticated]);
 
+  // Load availability data for this listing
   const loadAvailability = useCallback(async () => {
     try {
       const data = await availabilityService.getListingAvailability(listingId);
@@ -45,6 +46,7 @@ const AvailabilityCalendar = ({ listingId }) => {
     loadAvailability();
   }, [loadAvailability]);
 
+  // Format date to YYYY-MM-DD string for comparison
   const formatDateKey = (date) => {
     const d = new Date(date);
     const year = d.getUTCFullYear();
@@ -53,6 +55,7 @@ const AvailabilityCalendar = ({ listingId }) => {
     return `${year}-${month}-${day}`;
   };
 
+  // Determine status of a specific day (available, booked, or unset)
   const getDayStatus = (year, month, day) => {
     const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
     
@@ -69,6 +72,7 @@ const AvailabilityCalendar = ({ listingId }) => {
     return 'booked';
   };
 
+  // Get list of available time slots for a specific date
   const getAvailableTimeSlots = (dateStr) => {
     const dayAvailability = availability.filter(a => {
       const availDate = formatDateKey(a.date);
@@ -77,6 +81,7 @@ const AvailabilityCalendar = ({ listingId }) => {
     return dayAvailability.map(a => a.timeSlot);
   };
 
+  // Handle clicking on a date - opens modal for booking or management
   const handleDateClick = (year, month, day) => {
     const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
     setSelectedDate(dateStr);
@@ -85,6 +90,7 @@ const AvailabilityCalendar = ({ listingId }) => {
     setShowModal(true);
   };
 
+  // Provider updates availability for a time slot
   const handleProviderUpdate = async (timeSlot, isCurrentlyAvailable) => {
     const newStatus = isCurrentlyAvailable ? 'unavailable' : 'available';
     
@@ -98,6 +104,7 @@ const AvailabilityCalendar = ({ listingId }) => {
     }
   };
 
+  // Customer books a time slot
   const handleBooking = async () => {
     if (!selectedTime) {
       alert('Please select a time slot');
@@ -123,6 +130,7 @@ const AvailabilityCalendar = ({ listingId }) => {
     }
   };
 
+  // Calendar generation helpers
   const getDaysInMonth = (date) => {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
   };
@@ -135,10 +143,12 @@ const AvailabilityCalendar = ({ listingId }) => {
   const firstDay = getFirstDayOfMonth(currentMonth);
   const days = [];
 
+  // Add empty cells for days before month starts
   for (let i = 0; i < firstDay; i++) {
     days.push(<div key={`empty-${i}`} className="calendar-day empty"></div>);
   }
 
+  // Add actual days of the month
   for (let day = 1; day <= daysInMonth; day++) {
     const status = getDayStatus(currentMonth.getFullYear(), currentMonth.getMonth(), day);
     let statusClass = '';
@@ -164,6 +174,7 @@ const AvailabilityCalendar = ({ listingId }) => {
     );
   }
 
+  // Get all time slots for the selected date
   const allTimeSlotsForDate = availability.filter(a => {
     if (!selectedDate) return false;
     const availDate = formatDateKey(a.date);
@@ -174,34 +185,43 @@ const AvailabilityCalendar = ({ listingId }) => {
     <div className="availability-calendar">
       <h4>Availability Calendar</h4>
       
+      {/* Owner notification banner */}
       {isOwner && (
         <div style={{ background: '#e7f3ff', padding: '10px', borderRadius: '5px', marginBottom: '10px' }}>
           ✅ You are the owner of this listing. Click on any date to manage availability.
         </div>
       )}
       
+      {/* Customer notification banner */}
       {!isOwner && isAuthenticated && (
         <div style={{ background: '#fff3cd', padding: '10px', borderRadius: '5px', marginBottom: '10px' }}>
           📅 You are viewing this listing. Click on green dates to book this service.
         </div>
       )}
 
+      {/* Calendar header with month navigation */}
       <div className="calendar-header">
         <button onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1))}>←</button>
         <span>{currentMonth.toLocaleString('default', { month: 'long', year: 'numeric' })}</span>
         <button onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1))}>→</button>
       </div>
+      
+      {/* Weekday headers */}
       <div className="calendar-weekdays">
         {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => <div key={day}>{day}</div>)}
       </div>
+      
+      {/* Calendar days grid */}
       <div className="calendar-days">{days}</div>
       
+      {/* Hint text based on user role */}
       <p className="calendar-hint">
         {isOwner 
           ? '💡 Click on any date to set availability for specific time slots (only you can do this)'
           : '💡 Click on green dates to see available time slots and book'}
       </p>
 
+      {/* Modal for time slot selection (owner view or customer view) */}
       {showModal && (
         <div className="modal-overlay" onClick={() => setShowModal(false)}>
           <div className="modal-container" onClick={e => e.stopPropagation()}>
@@ -209,6 +229,7 @@ const AvailabilityCalendar = ({ listingId }) => {
             <p><strong>Date:</strong> {selectedDate}</p>
             
             {isOwner ? (
+              // Owner view - manage time slots
               <div>
                 <h4>Time Slots</h4>
                 <div className="time-slots-grid">
@@ -233,6 +254,7 @@ const AvailabilityCalendar = ({ listingId }) => {
                 <button className="modal-close" onClick={() => setShowModal(false)}>Close</button>
               </div>
             ) : (
+              // Customer view - book time slot
               <div>
                 <h4>Select Time Slot</h4>
                 {selectedDate && getAvailableTimeSlots(selectedDate).length === 0 ? (
@@ -255,6 +277,7 @@ const AvailabilityCalendar = ({ listingId }) => {
                   </div>
                 )}
                 
+                {/* Show message box only after time slot is selected */}
                 {selectedTime && (
                   <>
                     <textarea 

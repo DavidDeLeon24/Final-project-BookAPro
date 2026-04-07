@@ -1,28 +1,33 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import listingService from '../services/listingService';
-import reviewService from '../services/reviewService';  // ← Make sure this is correct
+import reviewService from '../services/reviewService';
 import AvailabilityCalendar from '../components/AvailabilityCalendar';
 import { useAuth } from '../context/AuthContext';
 
+// ListingDetail Page - Shows detailed information about a specific service listing
+// Includes service details, provider info, availability calendar, and customer reviews
 const ListingDetail = () => {
-  const { id } = useParams();
+  const { id } = useParams();           // Get listing ID from URL
   const navigate = useNavigate();
   const { isAuthenticated, isCustomer } = useAuth();
-  const [listing, setListing] = useState(null);
-  const [reviews, setReviews] = useState([]);
-  const [rating, setRating] = useState(5);
-  const [comment, setComment] = useState('');
-  const [showReviewForm, setShowReviewForm] = useState(false);
-  const [loading, setLoading] = useState(true);
+  
+  // State variables
+  const [listing, setListing] = useState(null);      // Listing data
+  const [reviews, setReviews] = useState([]);        // Customer reviews
+  const [rating, setRating] = useState(5);           // Selected rating for new review
+  const [comment, setComment] = useState('');        // Review comment text
+  const [showReviewForm, setShowReviewForm] = useState(false); // Toggle review form
+  const [loading, setLoading] = useState(true);      // Loading state
 
+  // Load listing data and reviews
   const loadData = useCallback(async () => {
     setLoading(true);
     try {
       const listingData = await listingService.getOne(id);
       setListing(listingData);
       
-      // Fix: Use correct method name
+      // Get reviews for this provider
       const reviewsData = await reviewService.getProviderReviews(listingData.provider._id);
       setReviews(reviewsData);
     } catch (error) {
@@ -35,6 +40,7 @@ const ListingDetail = () => {
     loadData();
   }, [loadData]);
 
+  // Handle review submission
   const handleSubmitReview = async (e) => {
     e.preventDefault();
     try {
@@ -47,7 +53,7 @@ const ListingDetail = () => {
       setShowReviewForm(false);
       setRating(5);
       setComment('');
-      loadData();
+      loadData();  // Refresh data to show new review
       alert('Review submitted successfully!');
     } catch (error) {
       console.error('Error submitting review:', error);
@@ -55,32 +61,47 @@ const ListingDetail = () => {
     }
   };
 
+  // Show loading indicator while fetching data
   if (loading) return <div className="loading">Loading...</div>;
   if (!listing) return <div className="loading">Listing not found</div>;
 
   return (
     <div className="detail-container">
+      {/* Back button */}
       <button className="back-btn" onClick={() => navigate(-1)}>← Back</button>
+      
       <div className="detail-content">
         <div className="detail-main">
+          {/* Listing Title */}
           <h1>{listing.title}</h1>
+          
+          {/* Provider Information */}
           <p className="provider">Provider: {listing.provider?.businessName || listing.provider?.name}</p>
+          
+          {/* Service Description */}
           <p className="description">{listing.description}</p>
+          
+          {/* Price and Rating Summary */}
           <div className="detail-info">
             <span>💰 ${listing.price}/{listing.priceUnit}</span>
             <span>⭐ {listing.averageRating?.toFixed(1) || 'No ratings yet'}</span>
           </div>
 
+          {/* Availability Calendar Component */}
           <AvailabilityCalendar listingId={listing._id} />
 
+          {/* Reviews Section */}
           <div className="reviews-section">
             <h3>Customer Reviews ({reviews.length})</h3>
+            
+            {/* Write Review Button - only visible to authenticated customers */}
             {isAuthenticated && isCustomer && !showReviewForm && (
               <button className="write-review-btn" onClick={() => setShowReviewForm(true)}>
                 Write a Review
               </button>
             )}
             
+            {/* Review Form - appears when Write Review is clicked */}
             {showReviewForm && (
               <form className="review-form" onSubmit={handleSubmitReview}>
                 <select value={rating} onChange={(e) => setRating(parseInt(e.target.value))}>
@@ -100,6 +121,7 @@ const ListingDetail = () => {
               </form>
             )}
 
+            {/* Display Reviews List */}
             {reviews.length === 0 ? (
               <p>No reviews yet. Be the first to review!</p>
             ) : (

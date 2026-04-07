@@ -2,30 +2,29 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
+// Login Page - Allows existing users to authenticate and access their account
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const [email, setEmail] = useState('');        // Email input state
+  const [password, setPassword] = useState('');  // Password input state
+  const [error, setError] = useState('');        // Error message state
+  const [loading, setLoading] = useState(false); // Loading state for form submission
+  const { login } = useAuth();                   // Get login function from auth context
   const navigate = useNavigate();
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
     
-    console.log('Attempting login with:', email);
-    
+    // Attempt to login with provided credentials
     const result = await login(email, password);
     
-    console.log('Login result:', result);
-    
     if (result.success) {
-      console.log('Login successful, redirecting...');
+      // Redirect to home page on successful login
       navigate('/');
     } else {
-      console.log('Login failed:', result.error);
+      // Display error message on failed login
       setError(result.error || 'Login failed. Please check your credentials.');
     }
     
@@ -36,8 +35,12 @@ const Login = () => {
     <div className="auth-container">
       <div className="auth-card">
         <h2>Login to BookAPro</h2>
+        
+        {/* Display error message if any */}
         {error && <div className="error-message">{error}</div>}
+        
         <form onSubmit={handleSubmit}>
+          {/* Email input field */}
           <input
             type="email"
             placeholder="Email"
@@ -45,6 +48,8 @@ const Login = () => {
             onChange={(e) => setEmail(e.target.value)}
             required
           />
+          
+          {/* Password input field */}
           <input
             type="password"
             placeholder="Password"
@@ -52,10 +57,14 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
+          
+          {/* Submit button - disabled while loading */}
           <button type="submit" disabled={loading}>
             {loading ? 'Logging in...' : 'Login'}
           </button>
         </form>
+        
+        {/* Link to registration page for new users */}
         <p>
           Don't have an account? <Link to="/register">Register here</Link>
         </p>

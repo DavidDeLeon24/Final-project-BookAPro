@@ -23,13 +23,13 @@ mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('MongoDB Connected'))
   .catch(err => console.log('MongoDB Error:', err));
 
-// Routes - IMPORTANT: These must come after middleware
+// Routes
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/listings', require('./routes/listingRoutes'));
 app.use('/api/reviews', require('./routes/reviewRoutes'));
 app.use('/api/availability', require('./routes/availabilityRoutes'));
 
-// Error handling middleware (must be last)
+// Error handling middleware
 app.use((err, req, res, next) => {
   console.error('Server error:', err);
   res.status(500).json({ message: err.message || 'Something went wrong!' });

@@ -2,21 +2,25 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
 
+// Profile Page - User profile dashboard showing account info, bookings, and listings
+// Different views for customers (bookings) and providers (listings)
 const Profile = () => {
   const { user } = useAuth();
-  const [bookings, setBookings] = useState([]);
-  const [myListings, setMyListings] = useState([]);
-  const [activeTab, setActiveTab] = useState('profile');
-  const [message, setMessage] = useState('');
+  const [bookings, setBookings] = useState([]);      // Customer's bookings
+  const [myListings, setMyListings] = useState([]);  // Provider's listings
+  const [activeTab, setActiveTab] = useState('profile'); // Current tab
+  const [message, setMessage] = useState('');        // Success/error message
 
-  // Wrap loadUserData with useCallback to fix dependency warning
+  // Load user-specific data based on role
   const loadUserData = useCallback(async () => {
     try {
+      // Load bookings for customers
       if (user?.role === 'customer') {
         const response = await api.get('/availability/my-bookings');
         setBookings(response.data);
       }
       
+      // Load listings for providers
       if (user?.role === 'provider') {
         const response = await api.get('/listings/my/listings');
         setMyListings(response.data);
@@ -26,17 +30,18 @@ const Profile = () => {
     }
   }, [user?.role]);
 
-  // Add loadUserData to dependency array
+  // Load data when component mounts or role changes
   useEffect(() => {
     loadUserData();
   }, [loadUserData]);
 
+  // Cancel a booking (customer only)
   const cancelBooking = async (bookingId) => {
     if (window.confirm('Are you sure you want to cancel this booking?')) {
       try {
         await api.delete(`/availability/booking/${bookingId}`);
         setMessage('Booking cancelled successfully!');
-        loadUserData();
+        loadUserData(); // Refresh the list
         setTimeout(() => setMessage(''), 3000);
       } catch (error) {
         setMessage('Failed to cancel booking');
@@ -45,12 +50,13 @@ const Profile = () => {
     }
   };
 
+  // Delete a listing (provider only)
   const deleteListing = async (listingId) => {
     if (window.confirm('Are you sure you want to delete this listing?')) {
       try {
         await api.delete(`/listings/${listingId}`);
         setMessage('Listing deleted successfully!');
-        loadUserData();
+        loadUserData(); // Refresh the list
         setTimeout(() => setMessage(''), 3000);
       } catch (error) {
         setMessage('Failed to delete listing');
@@ -59,6 +65,7 @@ const Profile = () => {
     }
   };
 
+  // Inline styles
   const styles = {
     container: {
       maxWidth: '1200px',
@@ -142,6 +149,7 @@ const Profile = () => {
 
   return (
     <div style={styles.container}>
+      {/* Profile Header with Avatar */}
       <div style={styles.header}>
         <div style={styles.avatar}>
           {user?.name?.charAt(0).toUpperCase()}
@@ -154,6 +162,7 @@ const Profile = () => {
         )}
       </div>
 
+      {/* Tab Navigation */}
       <div style={styles.tabs}>
         <button 
           style={{...styles.tab, ...(activeTab === 'profile' ? styles.activeTab : {})}}
@@ -161,6 +170,7 @@ const Profile = () => {
         >
           Profile Info
         </button>
+        {/* Show Bookings tab only for customers */}
         {user?.role === 'customer' && (
           <button 
             style={{...styles.tab, ...(activeTab === 'bookings' ? styles.activeTab : {})}}
@@ -169,6 +179,7 @@ const Profile = () => {
             My Bookings ({bookings.length})
           </button>
         )}
+        {/* Show Listings tab only for providers */}
         {user?.role === 'provider' && (
           <button 
             style={{...styles.tab, ...(activeTab === 'listings' ? styles.activeTab : {})}}
@@ -179,8 +190,10 @@ const Profile = () => {
         )}
       </div>
 
+      {/* Success/Error Message */}
       {message && <div style={styles.success}>{message}</div>}
 
+      {/* Profile Info Tab */}
       {activeTab === 'profile' && (
         <div style={styles.card}>
           <h3>Account Information</h3>
@@ -191,6 +204,7 @@ const Profile = () => {
         </div>
       )}
 
+      {/* Bookings Tab (Customer View) */}
       {activeTab === 'bookings' && (
         <div>
           <h3>My Bookings</h3>
@@ -216,6 +230,7 @@ const Profile = () => {
         </div>
       )}
 
+      {/* Listings Tab (Provider View) */}
       {activeTab === 'listings' && (
         <div>
           <h3>My Listings</h3>
