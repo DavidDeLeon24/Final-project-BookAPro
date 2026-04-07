@@ -1,9 +1,25 @@
+/* Reset all margins and paddings */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
 .app {
   min-height: 100vh;
   background: #f5f5f5;
+  margin: 0;
+  padding: 0;
 }
 
-/* Navbar */
+/* ========== NAVBAR ========== */
 .navbar {
   background: #007bff;
   padding: 1rem 0;
@@ -11,6 +27,8 @@
   position: sticky;
   top: 0;
   z-index: 100;
+  margin: 0;
+  width: 100%;
 }
 
 .nav-container {
@@ -29,6 +47,10 @@
   color: white;
   text-decoration: none;
   cursor: pointer;
+}
+
+.logo:hover {
+  opacity: 0.9;
 }
 
 .nav-links {
@@ -67,13 +89,14 @@
   background: rgba(255,255,255,0.2) !important;
 }
 
-/* Hero Section */
+/* ========== HERO SECTION ========== */
 .hero {
   background: linear-gradient(135deg, #007bff, #0056b3);
   color: white;
   text-align: center;
   padding: 4rem 2rem;
-  margin-bottom: 2rem;
+  margin: 0;
+  width: 100%;
 }
 
 .hero h1 {
@@ -86,7 +109,7 @@
   opacity: 0.9;
 }
 
-/* Search Section */
+/* ========== SEARCH SECTION ========== */
 .search-section {
   max-width: 800px;
   margin: -1.5rem auto 2rem;
@@ -108,6 +131,11 @@
   border: 1px solid #ddd;
   border-radius: 5px;
   font-size: 1rem;
+  outline: none;
+}
+
+.search-bar input:focus {
+  border-color: #007bff;
 }
 
 .search-bar select {
@@ -117,10 +145,185 @@
   font-size: 1rem;
   background: white;
   cursor: pointer;
+  outline: none;
 }
 
-/* Listings */
-.listings-section, .browse-container, .my-listings-container, .form-container {
+/* ========== AUTH FORMS (Centered) ========== */
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 80px);
+  padding: 2rem;
+  margin: 0;
+}
+
+.auth-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 450px;
+  margin: 0 auto;
+}
+
+.auth-card h2 {
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: #333;
+}
+
+.auth-card form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.auth-card input,
+.auth-card select {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.auth-card input:focus,
+.auth-card select:focus {
+  border-color: #007bff;
+}
+
+.auth-card button {
+  width: 100%;
+  padding: 0.75rem;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.auth-card button:hover {
+  background: #0056b3;
+}
+
+.auth-card button:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+}
+
+.auth-card p {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.auth-card a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.auth-card a:hover {
+  text-decoration: underline;
+}
+
+/* ========== FORM CONTAINER (Create/Edit Listing) ========== */
+.form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 80px);
+  padding: 2rem;
+  margin: 0;
+}
+
+.form-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.form-card h2 {
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: #333;
+}
+
+.form-card form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.form-card input,
+.form-card select,
+.form-card textarea {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.form-card input:focus,
+.form-card select:focus,
+.form-card textarea:focus {
+  border-color: #007bff;
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+}
+
+.form-row input,
+.form-row select {
+  flex: 1;
+}
+
+.form-card button {
+  width: 100%;
+  padding: 0.75rem;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.form-card button:hover {
+  background: #0056b3;
+}
+
+.cancel-btn {
+  background: #6c757d !important;
+  margin-top: 0.5rem;
+}
+
+.cancel-btn:hover {
+  background: #5a6268 !important;
+}
+
+/* ========== LISTINGS SECTION ========== */
+.listings-section,
+.browse-container,
+.my-listings-container,
+.detail-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem 20px;
@@ -129,14 +332,23 @@
 .listings-section h2 {
   margin-bottom: 2rem;
   font-size: 1.8rem;
+  color: #333;
 }
 
+.browse-container h1 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+/* ========== LISTINGS GRID ========== */
 .listings-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 1.5rem;
 }
 
+/* ========== LISTING CARD ========== */
 .listing-card {
   background: white;
   border-radius: 10px;
@@ -160,10 +372,16 @@
 
 .listing-card h3 {
   color: #333;
+  font-size: 1.2rem;
   margin-bottom: 0.5rem;
 }
 
-.provider, .category {
+.card-icon {
+  font-size: 2rem;
+}
+
+.provider,
+.category {
   color: #666;
   font-size: 0.9rem;
   margin-bottom: 0.5rem;
@@ -175,21 +393,18 @@
   line-height: 1.4;
 }
 
-.price, .rating {
-  margin-bottom: 0.5rem;
-  font-size: 0.9rem;
-}
-
 .price {
   color: #28a745;
   font-weight: bold;
+  margin-bottom: 0.5rem;
 }
 
 .rating {
   color: #f39c12;
+  margin-bottom: 0.5rem;
 }
 
-/* Dashboard */
+/* ========== DASHBOARD ========== */
 .dashboard-header {
   display: flex;
   justify-content: space-between;
@@ -207,6 +422,10 @@
   border-radius: 5px;
   cursor: pointer;
   font-size: 1rem;
+}
+
+.add-btn:hover {
+  background: #218838;
 }
 
 .card-actions {
@@ -229,9 +448,17 @@
   color: #333;
 }
 
+.edit-btn:hover {
+  background: #e0a800;
+}
+
 .delete-btn {
   background: #dc3545;
   color: white;
+}
+
+.delete-btn:hover {
+  background: #c82333;
 }
 
 .view-btn {
@@ -239,21 +466,13 @@
   color: white;
 }
 
-/* Detail Page */
-.detail-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem 20px;
+.view-btn:hover {
+  background: #0056b3;
 }
 
-.back-btn {
-  background: #6c757d;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-bottom: 1rem;
+/* ========== DETAIL PAGE (Two Column Layout) ========== */
+.detail-container {
+  padding-top: 1rem;
 }
 
 .detail-layout {
@@ -274,6 +493,20 @@
   align-self: start;
 }
 
+.back-btn {
+  background: #6c757d;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+
+.back-btn:hover {
+  background: #5a6268;
+}
+
 .detail-info {
   display: flex;
   gap: 2rem;
@@ -284,12 +517,12 @@
   flex-wrap: wrap;
 }
 
-/* Calendar */
+/* ========== CALENDAR ========== */
 .availability-calendar {
-  margin: 2rem 0;
-  padding: 1rem;
-  background: #f8f9fa;
+  background: white;
   border-radius: 10px;
+  padding: 1.5rem;
+  margin-top: 2rem;
 }
 
 .calendar-header {
@@ -308,7 +541,8 @@
   cursor: pointer;
 }
 
-.calendar-weekdays, .calendar-days {
+.calendar-weekdays,
+.calendar-days {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 0.5rem;
@@ -318,6 +552,8 @@
   text-align: center;
   font-weight: bold;
   padding: 0.5rem;
+  background: #f8f9fa;
+  border-radius: 5px;
 }
 
 .calendar-day {
@@ -340,17 +576,27 @@
   background: #f8d7da;
   border-color: #dc3545;
   cursor: not-allowed;
+  opacity: 0.7;
 }
 
 .calendar-day.empty {
   background: transparent;
   cursor: default;
+  border: none;
 }
 
 .badge {
   font-size: 0.7rem;
   display: block;
   margin-top: 0.25rem;
+}
+
+.available .badge {
+  color: #155724;
+}
+
+.booked .badge {
+  color: #721c24;
 }
 
 .calendar-hint {
@@ -360,7 +606,7 @@
   text-align: center;
 }
 
-/* Time Slots Grid */
+/* ========== TIME SLOTS ========== */
 .time-slots-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -416,7 +662,7 @@
   flex: 1;
 }
 
-/* Reviews */
+/* ========== REVIEWS ========== */
 .reviews-section {
   margin-top: 2rem;
 }
@@ -438,7 +684,8 @@
   margin: 1rem 0;
 }
 
-.review-form select, .review-form textarea {
+.review-form select,
+.review-form textarea {
   width: 100%;
   margin-bottom: 0.5rem;
   padding: 0.5rem;
@@ -469,80 +716,14 @@
   gap: 0.5rem;
 }
 
-/* Forms */
-.auth-container, .form-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: calc(100vh - 80px);
-  padding: 2rem;
-}
-
-.auth-card, .form-card {
-  background: white;
-  padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  width: 100%;
-  max-width: 450px;
-}
-
-.auth-card h2, .form-card h2 {
-  margin-bottom: 1.5rem;
-  text-align: center;
-}
-
-.auth-card input, .form-card input, .form-card select, .form-card textarea {
-  width: 100%;
-  padding: 0.75rem;
-  margin-bottom: 1rem;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 1rem;
-}
-
-.form-row {
-  display: flex;
-  gap: 1rem;
-}
-
-.form-row input, .form-row select {
-  flex: 1;
-}
-
-.auth-card button, .form-card button {
-  width: 100%;
-  padding: 0.75rem;
-  background: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  font-size: 1rem;
-  cursor: pointer;
-}
-
-.cancel-btn {
-  background: #6c757d !important;
-  margin-top: 0.5rem;
-}
-
-.auth-card p {
-  text-align: center;
-  margin-top: 1rem;
-}
-
-.auth-card a {
-  color: #007bff;
-  text-decoration: none;
-}
-
-/* Messages */
+/* ========== MESSAGES ========== */
 .error-message {
   background: #f8d7da;
   color: #721c24;
   padding: 0.75rem;
   border-radius: 5px;
   margin-bottom: 1rem;
+  text-align: center;
 }
 
 .success-message {
@@ -551,9 +732,12 @@
   padding: 0.75rem;
   border-radius: 5px;
   margin-bottom: 1rem;
+  text-align: center;
 }
 
-.loading, .no-results, .no-listings {
+.loading,
+.no-results,
+.no-listings {
   text-align: center;
   padding: 3rem;
   color: #666;
@@ -564,7 +748,7 @@
   border-radius: 10px;
 }
 
-/* Modal */
+/* ========== MODAL ========== */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -586,6 +770,11 @@
   width: 90%;
   max-height: 80vh;
   overflow-y: auto;
+}
+
+.modal-container h3 {
+  margin-bottom: 1rem;
+  text-align: center;
 }
 
 .modal-close {
@@ -627,65 +816,7 @@
   border-radius: 5px;
 }
 
-/* Profile Page */
-.profile-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
-}
-
-.profile-header {
-  background: white;
-  border-radius: 10px;
-  padding: 2rem;
-  margin-bottom: 2rem;
-  text-align: center;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.profile-avatar {
-  width: 100px;
-  height: 100px;
-  background: #007bff;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 1rem;
-  font-size: 3rem;
-  color: white;
-}
-
-.profile-tabs {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 2rem;
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 0.5rem;
-}
-
-.profile-tab {
-  padding: 0.5rem 1rem;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 1rem;
-}
-
-.profile-tab.active {
-  color: #007bff;
-  border-bottom: 2px solid #007bff;
-}
-
-.profile-card {
-  background: white;
-  border-radius: 10px;
-  padding: 1.5rem;
-  margin-bottom: 1rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-/* Responsive */
+/* ========== RESPONSIVE ========== */
 @media (max-width: 768px) {
   .nav-container {
     flex-direction: column;
@@ -711,9 +842,11 @@
   
   .form-row {
     flex-direction: column;
+    gap: 0;
   }
   
-  .calendar-weekdays, .calendar-days {
+  .calendar-weekdays,
+  .calendar-days {
     font-size: 0.8rem;
   }
   
@@ -726,16 +859,6 @@
     flex-direction: column;
   }
   
-  .detail-info {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  
-  .dashboard-header {
-    flex-direction: column;
-    text-align: center;
-  }
-  
   .detail-layout {
     grid-template-columns: 1fr;
   }
@@ -746,5 +869,15 @@
   
   .time-slots-grid {
     grid-template-columns: 1fr;
+  }
+  
+  .auth-card,
+  .form-card {
+    padding: 1.5rem;
+  }
+  
+  .dashboard-header {
+    flex-direction: column;
+    text-align: center;
   }
 }
